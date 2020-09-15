@@ -1,0 +1,48 @@
+<div class="ui one column stackable grid">
+    <div class="column">
+
+        <h3 class="ui top attached header">{{ 'aropixel.admin.label_product_stock_treshold'|trans }}</h3>
+        <div class="ui attached segment">
+            <table class="ui stackable inverted table">
+                <thead>
+                    <tr>
+                        <th style="color: #ababab;">Nom</th>
+                        <th style="color: #ababab;">Quantité en stock</th>
+                        <th style="color: #ababab;">Seuil d'alerte</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {% for productBelowStockTreshold in productsBelowStockTreshold %}
+
+                    {% set productVariant = productBelowStockTreshold.productVariant %}
+                    {% set product = productVariant.product %}
+
+                    <tr>
+                        <td>
+                            <strong>{{ product.name }}</strong>
+                        </td>
+                        <td>
+                            {{ productVariant.onHand }}
+                        </td>
+                        <td>
+                            {{ productVariant.stockTresholdAlert }}
+                        </td>
+                        <td>
+                            <div class="ui right floated buttons">
+                                <a class="ui inverted button" href="{{ path('sylius_admin_product_update', {'id':product.id}) }}">
+                                    <i class="icon search"></i>
+                                    {{ 'sylius.ui.edit'|trans }}
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

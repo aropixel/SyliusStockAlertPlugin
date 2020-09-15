@@ -2,7 +2,7 @@
     "name": "aropixel/sylius-stock-alert-plugin",
     "type": "sylius-plugin",
     "keywords": ["sylius", "sylius-plugin"],
-    "description": "Get notifed when your product stock reaches a certain treshold ",
+    "description": "Get notifed when your product stock reaches a certain treshold",
     "license": "MIT",
     "require": {
         "php": "^7.3",

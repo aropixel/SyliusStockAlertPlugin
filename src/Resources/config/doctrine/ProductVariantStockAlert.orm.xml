@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping">
+
+    <entity
+            name="Aropixel\SyliusStockAlertPlugin\Entity\ProductVariantStockAlert"
+            table="aropixel_product_variant_stock_alert"
+            repository-class="Aropixel\SyliusStockAlertPlugin\Repository\ProductVariantStockAlertRepository"
+    >
+
+        <id name="id" column="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+
+        <many-to-one
+                field="productVariant"
+                target-entity="Aropixel\SyliusStockAlertPlugin\Entity\ProductVariant"
+                inversed-by="productVariantStockAlerts">
+        </many-to-one>
+    </entity>
+
+</doctrine-mapping>

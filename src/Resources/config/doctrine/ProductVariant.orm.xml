@@ -4,6 +4,12 @@
 
     <mapped-superclass name="Aropixel\SyliusStockAlertPlugin\Entity\ProductVariant" table="sylius_product_variant">
         <field name="stockTresholdAlert" type="integer" nullable="true" />
+        <one-to-many
+                field="productVariantStockAlerts"
+                target-entity="Aropixel\SyliusStockAlertPlugin\Entity\ProductVariantStockAlert"
+                mapped-by="productVariant">
+        </one-to-many>
+
     </mapped-superclass>
 
 </doctrine-mapping>

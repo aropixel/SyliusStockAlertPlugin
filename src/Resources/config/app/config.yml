@@ -1,0 +1,17 @@
+winzou_state_machine:
+    sylius_payment:
+         callbacks:
+              after:
+                  aropixel_sylius_stock_alert:
+                      on: ["complete"]
+                      do: ["@aropixel_sylius_stock_alert.stock_notifier", "sendNotifications"]
+                      args: ["object"]
+
+
+sylius_ui:
+    events:
+        sylius.admin.dashboard.content:
+            blocks:
+                alerts_stock:
+                    template: "@SyliusAdmin/Dashboard/_alerts_stock.html.twig"
+                    priority: 46

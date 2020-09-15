@@ -3,6 +3,12 @@
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
 
+        <!-- REPOSITORY -->
+        <service id="aropixel_sylius_stock_alert.repository.product_variant_stock_alert" class="Aropixel\SyliusStockAlertPlugin\Repository\ProductVariantStockAlertRepository">
+            <argument type="service" id="doctrine"/>
+        </service>
+
+        <!-- FORM -->
         <service id="aropixel_sylius_stock_alert.form.extension.type.product.variant" class="Aropixel\SyliusStockAlertPlugin\Form\Extension\ProductVariantTypeExtension">
             <tag name="form.type_extension" extended-type="Sylius\Bundle\ProductBundle\Form\Type\ProductVariantType"/>
         </service>
@@ -10,6 +16,29 @@
         <service id="aropixel_sylius_stock_alert.form.extension.type.taxon" class="Aropixel\SyliusStockAlertPlugin\Form\Extension\TaxonTypeExtension">
             <tag name="form.type_extension" extended-type="Sylius\Bundle\TaxonomyBundle\Form\Type\TaxonType"/>
         </service>
+
+        <!-- NOTIFIERS -->
+        <service id="aropixel_sylius_stock_alert.stock_notifier" class="Aropixel\SyliusStockAlertPlugin\StockNotifier\StockNotifier" public="true">
+            <argument type="tagged_iterator" tag="aropixel.sylius_stock_alert_notifier_tag" />
+        </service>
+
+        <service id="aropixel_sylius_stock_alert.mail_stock_notifier" class="Aropixel\SyliusStockAlertPlugin\StockNotifier\MailStockNotifier" autoconfigure="true"/>
+
+        <service id="aropixel_sylius_stock_alert.dashboard_stock_notifier" class="Aropixel\SyliusStockAlertPlugin\StockNotifier\DashboardStockNotifier" autoconfigure="true">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="aropixel_sylius_stock_alert.repository.product_variant_stock_alert" />
+        </service>
+
+        <!-- CONTROLLER -->
+        <service id="sylius.controller.admin.dashboard" class="Aropixel\SyliusStockAlertPlugin\Controller\DashboardController" public="true">
+            <argument type="service" id="sylius.dashboard.statistics_provider" />
+            <argument type="service" id="sylius.repository.channel" />
+            <argument type="service" id="templating" />
+            <argument type="service" id="router" />
+            <argument type="service" id="aropixel_sylius_stock_alert.repository.product_variant_stock_alert" />
+            <argument type="service" id="Sylius\Component\Core\Dashboard\SalesDataProviderInterface" />
+        </service>
+
 
     </services>
 </container>
