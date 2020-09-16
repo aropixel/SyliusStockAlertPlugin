@@ -3,11 +3,7 @@
 
 namespace Aropixel\SyliusStockAlertPlugin\EventListener;
 
-
-use Aropixel\SyliusStockAlertPlugin\Repository\ProductVariantStockAlertRepository;
-use Aropixel\SyliusStockAlertPlugin\StockNotifier\DashboardStockNotifier;
 use Aropixel\SyliusStockAlertPlugin\TresholdStockManager\TresholdStockManagerInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Component\Product\Model\ProductInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -18,29 +14,11 @@ class ProductStockListener
      * @var TresholdStockManagerInterface
      */
     private $tresholdStockManager;
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-    /**
-     * @var ProductVariantStockAlertRepository
-     */
-    private $productVariantStockAlertRepository;
-    /**
-     * @var DashboardStockNotifier
-     */
-    private $dashboardStockNotifier;
 
     public function __construct(
-        TresholdStockManagerInterface $tresholdStockManager,
-        EntityManagerInterface $entityManager,
-        ProductVariantStockAlertRepository $productVariantStockAlertRepository,
-        DashboardStockNotifier $dashboardStockNotifier
+        TresholdStockManagerInterface $tresholdStockManager
     ){
         $this->tresholdStockManager = $tresholdStockManager;
-        $this->entityManager = $entityManager;
-        $this->productVariantStockAlertRepository = $productVariantStockAlertRepository;
-        $this->dashboardStockNotifier = $dashboardStockNotifier;
     }
 
     public function onProductUpdate(GenericEvent $event)
@@ -50,14 +28,11 @@ class ProductStockListener
 
         $productVariant = $product->getVariants()->first();
 
-        if (!$this->tresholdStockManager->isStockCritical($productVariant)) {
-            $productVariantStockAlert = $this->productVariantStockAlertRepository->findOneBy(['productVariant' => $productVariant]);
-            $this->entityManager->remove($productVariantStockAlert);
-            $this->entityManager->flush();
-            return;
+        if ($this->tresholdStockManager->isStockCritical($productVariant)) {
+            $this->tresholdStockManager->createProductVariantStockAlert($productVariant);
+        } else {
+            $this->tresholdStockManager->removeProductVariantStockAlert($productVariant);
         }
-
-        $this->dashboardStockNotifier->sendNotification($productVariant);
     }
 
 }

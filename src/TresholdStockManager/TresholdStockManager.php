@@ -71,7 +71,10 @@ class TresholdStockManager implements TresholdStockManagerInterface
         $stockAlertTresholdTaxons = [];
 
         foreach ($productVariant->getProduct()->getTaxons() as $productTaxon) {
-            $stockAlertTresholdTaxons[] = (int)$productTaxon->getStockTresholdAlert();
+
+            if (!empty($productTaxon->getStockTresholdAlert()) ) {
+                $stockAlertTresholdTaxons[] = (int)$productTaxon->getStockTresholdAlert();
+            }
         }
 
         return min($stockAlertTresholdTaxons);
@@ -89,6 +92,16 @@ class TresholdStockManager implements TresholdStockManagerInterface
             $productVariantStockAlert->setProductVariant($productVariant);
 
             $this->entityManager->persist($productVariantStockAlert);
+            $this->entityManager->flush();
+        }
+    }
+
+    public function removeProductVariantStockAlert(ProductVariantInterface $productVariant): void
+    {
+        $productVariantStockAlert = $this->productVariantStockAlertRepository->findOneBy(['productVariant' => $productVariant]);
+
+        if (!empty($productVariantStockAlert)) {
+            $this->entityManager->remove($productVariantStockAlert);
             $this->entityManager->flush();
         }
     }

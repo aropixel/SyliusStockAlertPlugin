@@ -35,9 +35,9 @@ class ProductVariant extends BaseProductVariant implements ProductVariantInterfa
     }
 
     /**
-     * @param int $stockTresholdAlert
+     * @param int|null $stockTresholdAlert
      */
-    public function setStockTresholdAlert(int $stockTresholdAlert): void
+    public function setStockTresholdAlert(?int $stockTresholdAlert): void
     {
         $this->stockTresholdAlert = $stockTresholdAlert;
     }

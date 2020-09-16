@@ -8,6 +8,11 @@
             <argument type="service" id="doctrine"/>
         </service>
 
+        <service id="aropixel_sylius_stock_alert.repository.product" class="Aropixel\SyliusStockAlertPlugin\Repository\ProductRepository">
+            <argument type="service" id="doctrine"/>
+            <argument>%sylius.model.product.class%</argument>
+        </service>
+
         <!-- FORM -->
         <service id="aropixel_sylius_stock_alert.form.extension.type.product.variant" class="Aropixel\SyliusStockAlertPlugin\Form\Extension\ProductVariantTypeExtension">
             <tag name="form.type_extension" extended-type="Sylius\Bundle\ProductBundle\Form\Type\ProductVariantType"/>
@@ -43,9 +48,14 @@
         <service id="Aropixel\SyliusStockAlertPlugin\EventListener\ProductStockListener">
             <tag name="kernel.event_listener" event="sylius.product.post_update" method="onProductUpdate"/>
             <argument type="service" id="aropixel_sylius_stock_alert.treshold_stock_manager"/>
+        </service>
+
+        <service id="Aropixel\SyliusStockAlertPlugin\EventListener\TaxonProductStockListener">
+            <tag name="kernel.event_listener" event="sylius.taxon.pre_update" method="onTaxonUpdate"/>
+            <argument type="service" id="aropixel_sylius_stock_alert.treshold_stock_manager"/>
+            <argument type="service" id="sylius.repository.taxon"/>
+            <argument type="service" id="aropixel_sylius_stock_alert.repository.product"/>
             <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="aropixel_sylius_stock_alert.repository.product_variant_stock_alert" />
-            <argument type="service" id="aropixel_sylius_stock_alert.dashboard_stock_notifier" />
         </service>
 
         <!-- STOCK MANAGER -->
@@ -54,5 +64,10 @@
             <argument type="service" id="aropixel_sylius_stock_alert.repository.product_variant_stock_alert" />
         </service>
 
+        <!-- TWIG EXTENSION -->
+        <service id="aropixel_sylius_stock_alert.twig_extension.variant_stock_treshold" class="Aropixel\SyliusStockAlertPlugin\Twig\StockTresholdExtension">
+            <tag name="twig.extension"/>
+            <argument type="service" id="aropixel_sylius_stock_alert.treshold_stock_manager"/>
+        </service>
     </services>
 </container>
