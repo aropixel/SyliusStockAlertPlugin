@@ -20,13 +20,13 @@
         <!-- NOTIFIERS -->
         <service id="aropixel_sylius_stock_alert.stock_notifier" class="Aropixel\SyliusStockAlertPlugin\StockNotifier\StockNotifier" public="true">
             <argument type="tagged_iterator" tag="aropixel.sylius_stock_alert_notifier_tag" />
+            <argument type="service" id="aropixel_sylius_stock_alert.treshold_stock_manager"/>
         </service>
 
         <service id="aropixel_sylius_stock_alert.mail_stock_notifier" class="Aropixel\SyliusStockAlertPlugin\StockNotifier\MailStockNotifier" autoconfigure="true"/>
 
         <service id="aropixel_sylius_stock_alert.dashboard_stock_notifier" class="Aropixel\SyliusStockAlertPlugin\StockNotifier\DashboardStockNotifier" autoconfigure="true">
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="aropixel_sylius_stock_alert.repository.product_variant_stock_alert" />
+            <argument type="service" id="aropixel_sylius_stock_alert.treshold_stock_manager"/>
         </service>
 
         <!-- CONTROLLER -->
@@ -39,6 +39,20 @@
             <argument type="service" id="Sylius\Component\Core\Dashboard\SalesDataProviderInterface" />
         </service>
 
+        <!-- EVENT LISTENER -->
+        <service id="Aropixel\SyliusStockAlertPlugin\EventListener\ProductStockListener">
+            <tag name="kernel.event_listener" event="sylius.product.post_update" method="onProductUpdate"/>
+            <argument type="service" id="aropixel_sylius_stock_alert.treshold_stock_manager"/>
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="aropixel_sylius_stock_alert.repository.product_variant_stock_alert" />
+            <argument type="service" id="aropixel_sylius_stock_alert.dashboard_stock_notifier" />
+        </service>
+
+        <!-- STOCK MANAGER -->
+        <service id="aropixel_sylius_stock_alert.treshold_stock_manager" class="Aropixel\SyliusStockAlertPlugin\TresholdStockManager\TresholdStockManager">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="aropixel_sylius_stock_alert.repository.product_variant_stock_alert" />
+        </service>
 
     </services>
 </container>

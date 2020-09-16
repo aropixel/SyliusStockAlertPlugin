@@ -3,43 +3,25 @@
 
 namespace Aropixel\SyliusStockAlertPlugin\StockNotifier;
 
-
 use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariant;
-use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariantStockAlert;
-use Aropixel\SyliusStockAlertPlugin\Repository\ProductVariantStockAlertRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Aropixel\SyliusStockAlertPlugin\TresholdStockManager\TresholdStockManagerInterface;
 
 class DashboardStockNotifier implements StockNotifierInterface
 {
 
     /**
-     * @var EntityManagerInterface
+     * @var TresholdStockManagerInterface
      */
-    private $entityManager;
-    /**
-     * @var ProductVariantStockAlertRepository
-     */
-    private $productVariantStockAlertRepository;
+    private $tresholdStockManager;
 
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        ProductVariantStockAlertRepository $productVariantStockAlertRepository
-    ) {
-        $this->entityManager = $entityManager;
-        $this->productVariantStockAlertRepository = $productVariantStockAlertRepository;
+    public function __construct(TresholdStockManagerInterface $tresholdStockManager)
+    {
+        $this->tresholdStockManager = $tresholdStockManager;
     }
 
     public function sendNotification(ProductVariant $variant)
     {
-        $productVariantStockAlert = $this->productVariantStockAlertRepository->findBy(['productVariant' => $variant]);
-
-        if (empty($productVariantStockAlert)) {
-            $productVariantStockAlert = new ProductVariantStockAlert();
-            $productVariantStockAlert->setProductVariant($variant);
-
-            $this->entityManager->persist($productVariantStockAlert);
-            $this->entityManager->flush();
-        }
+        $this->tresholdStockManager->createProductVariantStockAlert($variant);
     }
 
 }
