@@ -13,4 +13,17 @@ class ProductVariantStockAlertRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ProductVariantStockAlert::class);
     }
+
+
+    public function findAllEnabled()
+    {
+        $queryBuilder = $this->createQueryBuilder('pvsa')
+            ->innerJoin('pvsa.productVariant', 'productVariant')
+            ->innerJoin('productVariant.product', 'product')
+            ->where('product.enabled = true')
+            ->getQuery()
+        ;
+
+        return $queryBuilder->getResult();
+    }
 }

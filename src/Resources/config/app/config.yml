@@ -15,3 +15,9 @@ sylius_ui:
                 alerts_stock:
                     template: "@SyliusAdmin/Dashboard/_alerts_stock.html.twig"
                     priority: 46
+
+        sylius.admin.layout.stylesheets:
+            blocks:
+                alerts_stock_styles:
+                    template: "@AropixelSyliusStockAlertPlugin/Admin/_styles.html.twig"
+                    priority: 20

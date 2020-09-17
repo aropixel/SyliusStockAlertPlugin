@@ -5,8 +5,6 @@ namespace Aropixel\SyliusStockAlertPlugin\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Sylius\Component\Core\Model\ProductInterface;
-use Sylius\Component\Product\Model\Product;
 
 class ProductRepository extends ServiceEntityRepository
 {
@@ -21,6 +19,7 @@ class ProductRepository extends ServiceEntityRepository
     public function findProductsByTaxon($taxonId)
     {
         $queryBuilder = $this->createQueryBuilder('o')
+            ->where('o.enabled = true')
             ->innerJoin('o.productTaxons', 'productTaxon')
             ->andWhere('productTaxon.taxon = :taxonId')
             ->setParameter('taxonId', $taxonId)

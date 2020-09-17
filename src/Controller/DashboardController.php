@@ -79,7 +79,7 @@ final class DashboardController
             $data['currency'] = $channel->getBaseCurrency()->getCode();
         }
 
-        $data['productsBelowStockTreshold'] = $this->productVariantStockAlertRepository->findAll();
+        $data['productsBelowStockTreshold'] = $this->productVariantStockAlertRepository->findAllEnabled();
 
         return $this->templatingEngine->renderResponse('@SyliusAdmin/Dashboard/index.html.twig', $data);
     }

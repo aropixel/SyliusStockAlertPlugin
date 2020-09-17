@@ -28,7 +28,7 @@ class ProductStockListener
 
         $productVariant = $product->getVariants()->first();
 
-        if ($this->tresholdStockManager->isStockCritical($productVariant)) {
+        if ($product->isEnabled() && $this->tresholdStockManager->isStockCritical($productVariant)) {
             $this->tresholdStockManager->createProductVariantStockAlert($productVariant);
         } else {
             $this->tresholdStockManager->removeProductVariantStockAlert($productVariant);

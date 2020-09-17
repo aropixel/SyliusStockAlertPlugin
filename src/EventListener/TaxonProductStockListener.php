@@ -55,7 +55,7 @@ class TaxonProductStockListener
 
                 $productVariant = $product->getVariants()->first();
 
-                if (empty($productVariant->getStockTresholdAlert())) {
+                if ($product->isEnabled() && empty($productVariant->getStockTresholdAlert())) {
 
                     if (!$this->tresholdStockManager->isStockCritical($productVariant)) {
                         $this->tresholdStockManager->removeProductVariantStockAlert($productVariant);
