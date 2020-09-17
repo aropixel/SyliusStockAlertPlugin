@@ -26,13 +26,14 @@ class MailStockNotifier implements StockNotifierInterface
 
     public function sendNotification(ProductVariant $variant)
     {
-        $emailRecipients = $this->params->get('aropixel.sylius_stock_alert.notifier_emails');
+        if ($this->params->get('aropixel.sylius_stock_alert.email_notifier.enabled')) {
+            $emailRecipients = $this->params->get('aropixel.sylius_stock_alert.email_notifier.recipients');
 
-        $this->sender->send('alert_stock', $emailRecipients, [
-                'productVariant' => $variant
-            ]
-        );
-
+            $this->sender->send('alert_stock', $emailRecipients, [
+                    'productVariant' => $variant
+                ]
+            );
+        }
     }
 
 }

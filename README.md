@@ -1,93 +1,95 @@
 <p align="center">
-    <a href="https://sylius.com" target="_blank">
-        <img src="https://demo.sylius.com/assets/shop/img/logo.png" />
-    </a>
+  <a href="http://www.aropixel.com/">
+    <img src="https://avatars1.githubusercontent.com/u/14820816?s=200&v=4" alt="Aropixel logo" width="75" height="75" style="border-radius:100px">
+  </a>
 </p>
 
-<h1 align="center">Plugin Skeleton</h1>
+<h1 align="center">Sylius Stock Alert Plugin</h1>
+<h3 align="center">Get notifed when your product stock reaches a certain treshold</h3>
 
-<p align="center">Skeleton for starting Sylius plugins.</p>
 
-## Documentation
+## Table of contents
 
-For a comprehensive guide on Sylius Plugins development please go to Sylius documentation,
-there you will find the <a href="https://docs.sylius.com/en/latest/plugin-development-guide/index.html">Plugin Development Guide</a>, that is full of examples.
+- [Presentation](#presentation)
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
 
-## Quickstart Installation
 
-1. Run `composer create-project sylius/plugin-skeleton ProjectName`.
+## Presentation
 
-2. From the plugin skeleton root directory, run the following commands:
 
-    ```bash
-    $ (cd tests/Application && yarn install)
-    $ (cd tests/Application && yarn build)
-    $ (cd tests/Application && bin/console assets:install public -e test)
-    
-    $ (cd tests/Application && bin/console doctrine:database:create -e test)
-    $ (cd tests/Application && bin/console doctrine:schema:create -e test)
-    ```
+Once the plugin is installed and configured, you'll be able to define in the admin a stock treshold for each product and / or taxonomy.
+When inventory levels fall below this threshold (wether with a new order, a stock modification in the admin or a stock treshold modification), notifications will be displayed in the admin dashboard and also sent by emails. 
+Custom notifier can
+also be implemented easily.
 
-To be able to setup a plugin's database, remember to configure you database credentials in `tests/Application/.env` and `tests/Application/.env.test`.
+
+## Installation
+
+In a sylius application :
+
+- Install the plugin : 
+`composer require aropixel/sylius-stock-alert-plugin`
+
+If the plugin is not registered in the config/bundles.php file, register it by adding:
+```
+"Aropixel\SyliusStockAlertPlugin\AropixelSyliusStockAlertPlugin::class => ['all' => true],"
+```
+
+- Create a aropixel_sylius_stock_alert.yaml in the config folder and import the plugin configuration:
+
+```
+imports:
+    - { resource: "@AropixelSyliusStockAlertPlugin/Resources/config/app/config.yml" }
+```
+
+- Make sure the sylius mailer plugin is configured (in your config/sylius_mail.yaml file)
+
+- If you need the emails stock alert, enable it and configure it in the aropixel_sylius_stock_alert.yaml (you can multiple recipients for the emails alerts): 
+
+```
+aropixel_sylius_stock_alert:
+    mail_stock_notifier:
+        enabled: true
+        recipients: ['david@aropixel.com']
+```
+
+- Make your 'ProductVariant' entity (in your src/Entity/Product folder) extends the ProductVariant entity of the bundle:
+
+```
+use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariant as BaseProductVariant;
+...
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="sylius_product_variant")
+ */
+class ProductVariant extends BaseProductVariant
+{
+...
+}
+
+```
+
+- install the assets: 
+
+```php bin/console assets:install```
+
 
 ## Usage
 
-### Running plugin tests
+You can define stock treshold in the product admin ("stock" tab), but also in the taxonomies of the product. The stock treshold in the product have
+the highest priority: if it's defined, it will not be overrided by the stock treshold of the taxonomy. If the stock
+treshold of the product is not defined, the plugin will look in all the taxonomies of the product, compare them all and keep only the 
+lowest (the most restrictive stock treshold of the taxonomies).
 
-  - PHPUnit
+Everytime the stock or stock treshold changes, the plugin updates the dashboard notifications.
 
-    ```bash
-    $ vendor/bin/phpunit
-    ```
-
-  - PHPSpec
-
-    ```bash
-    $ vendor/bin/phpspec run
-    ```
-
-  - Behat (non-JS scenarios)
-
-    ```bash
-    $ vendor/bin/behat --tags="~@javascript"
-    ```
-
-  - Behat (JS scenarios)
+Everytime an order is completed, the plugin will look for all the notifiers implemented (by default only the email notifier), and send the
+associated notification. The Email notifier is the only one implemented by default in the plugin. If you want to implements
+other notifier (like SMS etc), you just need to create a class that extends the Aropixel\SyliusStockAlertPlugin\StockNotifier\StockNotifierInterface
+and implement the sendNotification() method. Your method will be automatically called.
  
-    1. Download [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
-    
-    2. Download [Selenium Standalone Server](https://www.seleniumhq.org/download/).
-    
-    2. Run Selenium server with previously downloaded Chromedriver:
-    
-        ```bash
-        $ java -Dwebdriver.chrome.driver=chromedriver -jar selenium-server-standalone.jar
-        ```
-        
-    3. Run test application's webserver on `localhost:8080`:
-    
-        ```bash
-        $ (cd tests/Application && bin/console server:run localhost:8080 -d public -e test)
-        ```
-    
-    4. Run Behat:
-    
-        ```bash
-        $ vendor/bin/behat --tags="@javascript"
-        ```
-
-### Opening Sylius with your plugin
-
-- Using `test` environment:
-
-    ```bash
-    $ (cd tests/Application && bin/console sylius:fixtures:load -e test)
-    $ (cd tests/Application && bin/console server:run -d public -e test)
-    ```
-    
-- Using `dev` environment:
-
-    ```bash
-    $ (cd tests/Application && bin/console sylius:fixtures:load -e dev)
-    $ (cd tests/Application && bin/console server:run -d public -e dev)
-    ```
+## License
+Aropixel Blog Bundle is under the [MIT License](LICENSE)

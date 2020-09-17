@@ -17,8 +17,12 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('mail_stock_notifier')
                     ->children()
-                        ->arrayNode('emails')
+                        ->booleanNode('enabled')
+                            ->defaultTrue()
+                        ->end()
+                        ->arrayNode('recipients')
                             ->scalarPrototype()->end()
+                        ->end()
                     ->end()
                 ->end() // mail_stock_notifier
             ->end();

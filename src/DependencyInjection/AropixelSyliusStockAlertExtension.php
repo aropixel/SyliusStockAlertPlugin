@@ -38,7 +38,8 @@ final class AropixelSyliusStockAlertExtension extends Extension implements Prepe
 
     private function registerParameters(ContainerBuilder $container, array $config)
     {
-        $container->setParameter('aropixel.sylius_stock_alert.notifier_emails', $config['mail_stock_notifier']['emails']);
+        $container->setParameter('aropixel.sylius_stock_alert.email_notifier.enabled', $config['mail_stock_notifier']['enabled']);
+        $container->setParameter('aropixel.sylius_stock_alert.email_notifier.recipients', $config['mail_stock_notifier']['recipients']);
     }
 
     public function prepend(ContainerBuilder $container)
