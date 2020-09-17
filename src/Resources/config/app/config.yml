@@ -21,3 +21,11 @@ sylius_ui:
                 alerts_stock_styles:
                     template: "@AropixelSyliusStockAlertPlugin/Admin/_styles.html.twig"
                     priority: 20
+
+
+sylius_mailer:
+    emails:
+        alert_stock:
+            subject: Stock critique pour {{ productVariant.product.name }}
+            template: "@AropixelSyliusStockAlertPlugin/Emails/alert_stock.html.twig"
+            enabled: true

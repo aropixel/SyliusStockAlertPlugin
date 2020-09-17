@@ -1,0 +1,13 @@
+{% block subject %}
+    Stock critique pour {{ productVariant.product.name }}
+{% endblock %}
+
+{% block body %}
+    <p>
+        Attention, le produit "{{ productVariant.product.name }}" est bientôt en rupture de stock !
+        Il ne reste de que {{ productVariant.onHand }} produit.
+    </p>
+    <p>
+        Pour mettre à jour le stock de ce produit, cliquez <a href="{{ path('sylius_admin_product_update', {'id':productVariant.product.id}) }}">ici</a>.
+    </p>
+{% endblock %}

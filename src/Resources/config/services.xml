@@ -28,10 +28,9 @@
             <argument type="service" id="aropixel_sylius_stock_alert.treshold_stock_manager"/>
         </service>
 
-        <service id="aropixel_sylius_stock_alert.mail_stock_notifier" class="Aropixel\SyliusStockAlertPlugin\StockNotifier\MailStockNotifier" autoconfigure="true"/>
-
-        <service id="aropixel_sylius_stock_alert.dashboard_stock_notifier" class="Aropixel\SyliusStockAlertPlugin\StockNotifier\DashboardStockNotifier" autoconfigure="true">
-            <argument type="service" id="aropixel_sylius_stock_alert.treshold_stock_manager"/>
+        <service id="aropixel_sylius_stock_alert.mail_stock_notifier" class="Aropixel\SyliusStockAlertPlugin\StockNotifier\MailStockNotifier" autoconfigure="true">
+            <argument type="service" id="parameter_bag"/>
+            <argument type="service" id="sylius.email_sender"/>
         </service>
 
         <!-- CONTROLLER -->

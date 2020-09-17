@@ -39,10 +39,7 @@ class TresholdStockManager implements TresholdStockManagerInterface
         $productVariant = $product->getVariants()->first();
 
         // if there is not stock alert treshold defined for the product or the product taxons
-        if (!empty($this->getStockAlertTreshold($productVariant)) &&
-            $product->isEnabled() &&
-            $this->isStockCritical($productVariant)
-        ) {
+        if ($this->isStockCritical($productVariant)) {
             $this->createProductVariantStockAlert($productVariant);
         } else {
             $this->removeProductVariantStockAlert($productVariant);
@@ -57,7 +54,17 @@ class TresholdStockManager implements TresholdStockManagerInterface
     {
         $stockAlertTreshold = $this->getStockAlertTreshold($productVariant);
 
-        return (intval($productVariant->getOnHand()) <= $stockAlertTreshold);
+        $product = $productVariant->getProduct();
+
+        if (!empty($stockAlertTreshold) &&
+            $product->isEnabled() &&
+            (intval($productVariant->getOnHand()) <= $stockAlertTreshold)
+        ) {
+            return true;
+        }
+
+        return false;
+
     }
 
     /**

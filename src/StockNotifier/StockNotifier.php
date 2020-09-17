@@ -31,10 +31,13 @@ class StockNotifier
             foreach ($payment->getOrder()->getItems() as $item)
             {
                 /** @var ProductVariant $variant */
-                $variant = $item->getVariant();
+                $productVariant = $item->getVariant();
 
-                if ($this->tresholdStockManager->isStockCritical($variant)) {
-                    $stockNotifier->sendNotification($variant);
+                if ($this->tresholdStockManager->isStockCritical($productVariant)) {
+                    $this->tresholdStockManager->createProductVariantStockAlert($productVariant);
+                    $stockNotifier->sendNotification($productVariant);
+                } else {
+                    $this->tresholdStockManager->removeProductVariantStockAlert($productVariant);
                 }
 
             }
