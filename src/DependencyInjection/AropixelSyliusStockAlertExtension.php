@@ -16,8 +16,15 @@ final class AropixelSyliusStockAlertExtension extends Extension implements Prepe
     /**
      * {@inheritdoc}
      */
-    public function load(array $config, ContainerBuilder $container): void
+    public function load(array $configs, ContainerBuilder $container): void
     {
+
+        $configuration = new Configuration();
+
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $this->registerParameters($container, $config);
+
 
         $container->registerForAutoconfiguration(StockNotifierInterface::class)
             ->addTag('aropixel.sylius_stock_alert_notifier_tag')
@@ -27,6 +34,11 @@ final class AropixelSyliusStockAlertExtension extends Extension implements Prepe
 
         $loader->load('services.xml');
 
+    }
+
+    private function registerParameters(ContainerBuilder $container, array $config)
+    {
+        $container->setParameter('aropixel.sylius_stock_alert.notifier_emails', $config['mail_stock_notifier']['emails']);
     }
 
     public function prepend(ContainerBuilder $container)

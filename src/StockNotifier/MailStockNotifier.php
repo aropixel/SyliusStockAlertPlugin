@@ -12,6 +12,7 @@ class MailStockNotifier implements StockNotifierInterface
     public function sendNotification(ProductVariant $variant)
     {
 
+
     }
 
 }
