@@ -2,15 +2,19 @@
     <div class="column">
 
         <h3 class="ui top attached header">{{ 'aropixel.admin.dashboard_stock_treshold_table_title'|trans }}</h3>
+
         <div class="ui attached segment alertStockTableContainer">
-            <table class="ui stackable inverted table">
+
+            {% if productsBelowStockTreshold | length > 0 %}
+
+                <table class="ui stackable inverted table">
                 <thead>
-                    <tr>
-                        <th style="color: #ababab;">Nom</th>
-                        <th style="color: #ababab;">Quantité en stock</th>
-                        <th style="color: #ababab;">Seuil d'alerte</th>
-                        <th></th>
-                    </tr>
+                <tr>
+                    <th style="color: #ababab;">Nom</th>
+                    <th style="color: #ababab;">Quantité en stock</th>
+                    <th style="color: #ababab;">Seuil d'alerte</th>
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody>
 
@@ -42,6 +46,10 @@
 
                 </tbody>
             </table>
+
+            {% else %}
+                <p>{{ 'aropixel.admin.dashboard_stock_treshold_no_products'|trans }}</p>
+            {% endif %}
         </div>
 
     </div>

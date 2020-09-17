@@ -6,11 +6,12 @@ use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariantStockAlert;
 use Aropixel\SyliusStockAlertPlugin\Repository\ProductVariantStockAlertRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Component\Product\Model\ProductVariantInterface;
+use Sylius\Component\Core\Model\ProductInterface;
 
 class TresholdStockManager implements TresholdStockManagerInterface
 {
 
-    private const DEFAULT_STOCK_ALERT_TRESHOLD = 5;
+    private const DEFAULT_STOCK_ALERT_TRESHOLD = null;
 
     /**
      * @var EntityManagerInterface
@@ -29,6 +30,25 @@ class TresholdStockManager implements TresholdStockManagerInterface
         $this->productVariantStockAlertRepository = $productVariantStockAlertRepository;
     }
 
+
+    /**
+     * @param ProductInterface $product
+     */
+    public function setStockAlertTresholdForProduct(ProductInterface $product): void
+    {
+        $productVariant = $product->getVariants()->first();
+
+        // if there is not stock alert treshold defined for the product or the product taxons
+        if (!empty($this->getStockAlertTreshold($productVariant)) &&
+            $product->isEnabled() &&
+            $this->isStockCritical($productVariant)
+        ) {
+            $this->createProductVariantStockAlert($productVariant);
+        } else {
+            $this->removeProductVariantStockAlert($productVariant);
+        }
+    }
+
     /**
      * @param ProductVariantInterface $productVariant
      * @return bool
@@ -42,15 +62,14 @@ class TresholdStockManager implements TresholdStockManagerInterface
 
     /**
      * @param ProductVariantInterface $productVariant
-     * @return int
+     * @return int|null
      */
-    public function getStockAlertTreshold(ProductVariantInterface $productVariant): int
+    public function getStockAlertTreshold(ProductVariantInterface $productVariant): ?int
     {
-
         $stockAlertTresholdProduct = $productVariant->getStockTresholdAlert();
 
         if (!empty($stockAlertTresholdProduct)) {
-            return (int)$stockAlertTresholdProduct;
+            return $stockAlertTresholdProduct;
         }
 
         $stockAlertTresholdTaxon = $this->getStockAlertTresholdTaxon($productVariant);
@@ -77,7 +96,11 @@ class TresholdStockManager implements TresholdStockManagerInterface
             }
         }
 
-        return min($stockAlertTresholdTaxons);
+        if (!empty($stockAlertTresholdTaxons)) {
+            return min($stockAlertTresholdTaxons);
+        }
+
+        return null;
     }
 
     /**

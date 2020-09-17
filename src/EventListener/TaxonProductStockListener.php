@@ -52,19 +52,7 @@ class TaxonProductStockListener
             $products = $this->productRepository->findProductsByTaxon($taxon->getId());
 
             foreach ($products as $product) {
-
-                $productVariant = $product->getVariants()->first();
-
-                if ($product->isEnabled() && empty($productVariant->getStockTresholdAlert())) {
-
-                    if (!$this->tresholdStockManager->isStockCritical($productVariant)) {
-                        $this->tresholdStockManager->removeProductVariantStockAlert($productVariant);
-                    } else {
-                        $this->tresholdStockManager->createProductVariantStockAlert($productVariant);
-                    }
-
-                }
-
+                $this->tresholdStockManager->setStockAlertTresholdForProduct($product);
             }
         }
 

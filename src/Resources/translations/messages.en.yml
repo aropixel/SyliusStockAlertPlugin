@@ -2,3 +2,4 @@ aropixel:
     admin:
         label_product_stock_treshold: Stock treshold alert
         dashboard_stock_treshold_table_title: Low stocks products treshold
+        dashboard_stock_treshold_no_products: There isn't any low stock product

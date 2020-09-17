@@ -2,3 +2,4 @@ aropixel:
     admin:
         label_product_stock_treshold: Seuil d'alerte du stock
         dashboard_stock_treshold_table_title: Produits en stock d'alerte
+        dashboard_stock_treshold_no_products: Il n'y a pas de produit en stock critique
