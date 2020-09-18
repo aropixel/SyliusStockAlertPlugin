@@ -44,7 +44,7 @@ imports:
     - { resource: "@AropixelSyliusStockAlertPlugin/Resources/config/app/config.yml" }
 ```
 
-- Make sure the sylius mailer plugin is configured (in your config/sylius_mail.yaml file)
+- Make sure the sylius mailer plugin is configured (in your config/sylius_mailer.yaml file)
 
 - If you need the emails stock alert, enable it and configure it in the aropixel_sylius_stock_alert.yaml (you can multiple recipients for the emails alerts): 
 
