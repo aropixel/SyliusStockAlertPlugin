@@ -72,6 +72,13 @@ class ProductVariant extends BaseProductVariant
 
 ```
 
+- run the migrations
+
+```
+php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:migrate
+```
+
 - install the assets: 
 
 ```php bin/console assets:install```
