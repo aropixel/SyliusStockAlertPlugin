@@ -34,7 +34,7 @@ In a sylius application :
 
 If the plugin is not registered in the config/bundles.php file, register it by adding:
 ```
-"Aropixel\SyliusStockAlertPlugin\AropixelSyliusStockAlertPlugin::class => ['all' => true],"
+Aropixel\SyliusStockAlertPlugin\AropixelSyliusStockAlertPlugin::class => ['all' => true],
 ```
 
 - Create a aropixel_sylius_stock_alert.yaml in the config folder and import the plugin configuration:
@@ -44,7 +44,7 @@ imports:
     - { resource: "@AropixelSyliusStockAlertPlugin/Resources/config/app/config.yml" }
 ```
 
-- Make sure the sylius mailer plugin is configured (in your config/sylius_mail.yaml file)
+- Make sure the sylius mailer plugin is configured (in your config/sylius_mailer.yaml file)
 
 - If you need the emails stock alert, enable it and configure it in the aropixel_sylius_stock_alert.yaml (you can multiple recipients for the emails alerts): 
 
@@ -70,6 +70,31 @@ class ProductVariant extends BaseProductVariant
 ...
 }
 
+```
+
+
+- Make your 'Taxon' entity (in your src/Entity/Taxonomy folder) extends the ProductVariant entity of the bundle:
+
+```
+use Aropixel\SyliusStockAlertPlugin\Entity\Taxon as BaseTaxon;
+...
+
+**
+ * @ORM\Entity
+ * @ORM\Table(name="sylius_taxon")
+ */
+class Taxon extends BaseTaxon implements Comparable
+{
+...
+}
+
+```
+
+- run the migrations
+
+```
+php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:migrate
 ```
 
 - install the assets: 
