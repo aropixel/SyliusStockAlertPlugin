@@ -72,6 +72,24 @@ class ProductVariant extends BaseProductVariant
 
 ```
 
+
+- Make your 'Taxon' entity (in your src/Entity/Taxonomy folder) extends the ProductVariant entity of the bundle:
+
+```
+use Aropixel\SyliusStockAlertPlugin\Entity\Taxon as BaseTaxon;
+...
+
+**
+ * @ORM\Entity
+ * @ORM\Table(name="sylius_taxon")
+ */
+class Taxon extends BaseTaxon implements Comparable
+{
+...
+}
+
+```
+
 - run the migrations
 
 ```
