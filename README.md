@@ -34,7 +34,7 @@ In a sylius application :
 
 If the plugin is not registered in the config/bundles.php file, register it by adding:
 ```
-"Aropixel\SyliusStockAlertPlugin\AropixelSyliusStockAlertPlugin::class => ['all' => true],"
+Aropixel\SyliusStockAlertPlugin\AropixelSyliusStockAlertPlugin::class => ['all' => true],
 ```
 
 - Create a aropixel_sylius_stock_alert.yaml in the config folder and import the plugin configuration:
