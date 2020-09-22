@@ -55,10 +55,11 @@ aropixel_sylius_stock_alert:
         recipients: ['david@aropixel.com']
 ```
 
-- Make your 'ProductVariant' entity (in your src/Entity/Product folder) extends the ProductVariant entity of the bundle:
+- use the ProductVariantTrait in your productVariant Entity
 
 ```
-use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariant as BaseProductVariant;
+...
+use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariantTrait as AropixelSyliusStockAlertProductVariantTrait;
 ...
 
 /**
@@ -67,11 +68,51 @@ use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariant as BaseProductVariant;
  */
 class ProductVariant extends BaseProductVariant
 {
+    use AropixelSyliusStockAlertProductVariantTrait {
+        AropixelSyliusStockAlertProductVariantTrait::__construct as private __stockAlertTraitConstruct;
+    }
+
+    public function __construct()
+    {
+        $this->__stockAlertTraitConstruct();
+        parent::__construct();
+    }
+
 ...
 }
 
 ```
 
+<<<<<<< Updated upstream
+=======
+
+- Use the TaxonTrait in your Taxon Entity
+
+```
+...
+use Aropixel\SyliusStockAlertPlugin\Entity\TaxonTrait as AropixelSyliusStockAlertTaxonVariantTrait;
+...
+
+**
+ * @ORM\Entity
+ * @ORM\Table(name="sylius_taxon")
+ */
+class Taxon extends BaseTaxon implements Comparable
+{
+ use AropixelSyliusStockAlertTaxonVariantTrait;
+...
+}
+
+```
+
+- run the migrations
+
+```
+php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:migrate
+```
+
+>>>>>>> Stashed changes
 - install the assets: 
 
 ```php bin/console assets:install```
