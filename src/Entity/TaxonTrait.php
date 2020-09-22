@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Aropixel\SyliusStockAlertPlugin\Entity;
 
-use Sylius\Component\Core\Model\Taxon as BaseTaxon;
-use Sylius\Component\Taxonomy\Model\TaxonInterface;
+use Doctrine\ORM\Mapping as ORM;
 
 
-class Taxon extends BaseTaxon implements TaxonInterface
+trait TaxonTrait
 {
-    /** @var int */
+    /** @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
     private $stockTresholdAlert;
 
     /**

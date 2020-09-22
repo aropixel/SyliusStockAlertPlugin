@@ -14,7 +14,7 @@
 
         <many-to-one
                 field="productVariant"
-                target-entity="Aropixel\SyliusStockAlertPlugin\Entity\ProductVariant"
+                target-entity="Sylius\Component\Product\Model\ProductVariantInterface"
                 inversed-by="productVariantStockAlerts">
             <join-column name="product_variant_id" nullable="false"/>
         </many-to-one>

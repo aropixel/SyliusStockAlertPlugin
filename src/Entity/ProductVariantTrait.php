@@ -1,28 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aropixel\SyliusStockAlertPlugin\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Sylius\Component\Core\Model\ProductVariant as BaseProductVariant;
-use Sylius\Component\Product\Model\ProductVariantInterface;
+use Doctrine\ORM\Mapping as ORM;
 
-class ProductVariant extends BaseProductVariant implements ProductVariantInterface
+trait ProductVariantTrait
 {
-    /** @var int */
-    private $stockTresholdAlert;
 
+    /** @var int
+     * @ORM\Column(type="integer", nullable=true)
+     *
+     */
+    private $stockTresholdAlert;
 
     /**
      * @var Collection|ProductVariantStockAlertInterface[]
+     *
+     * @ORM\OneToMany(targetEntity="Aropixel\SyliusStockAlertPlugin\Entity\ProductVariantStockAlert", mappedBy="productVariant")
      */
     protected $productVariantStockAlerts;
 
 
     public function __construct()
     {
-        parent::__construct();
-
         $this->productVariantStockAlerts = new ArrayCollection();
     }
 
@@ -57,7 +61,4 @@ class ProductVariant extends BaseProductVariant implements ProductVariantInterfa
     {
         $this->productVariantStockAlerts = $productVariantStockAlerts;
     }
-
-
-
 }

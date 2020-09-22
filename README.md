@@ -55,10 +55,11 @@ aropixel_sylius_stock_alert:
         recipients: ['david@aropixel.com']
 ```
 
-- Make your 'ProductVariant' entity (in your src/Entity/Product folder) extends the ProductVariant entity of the bundle:
+- use the ProductVariantTrait in your productVariant Entity
 
 ```
-use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariant as BaseProductVariant;
+...
+use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariantTrait as AropixelSyliusStockAlertProductVariantTrait;
 ...
 
 /**
@@ -67,16 +68,36 @@ use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariant as BaseProductVariant;
  */
 class ProductVariant extends BaseProductVariant
 {
+    use AropixelSyliusStockAlertProductVariantTrait {
+        AropixelSyliusStockAlertProductVariantTrait::__construct as private __stockAlertTraitConstruct;
+    }
+
+    public function __construct()
+    {
+        $this->__stockAlertTraitConstruct();
+        parent::__construct();
+    }
+
 ...
 }
 
 ```
 
+<<<<<<< HEAD
 
 - Make your 'Taxon' entity (in your src/Entity/Taxonomy folder) extends the ProductVariant entity of the bundle:
 
 ```
 use Aropixel\SyliusStockAlertPlugin\Entity\Taxon as BaseTaxon;
+=======
+<<<<<<< Updated upstream
+=======
+
+- Use the TaxonTrait in your Taxon Entity
+
+```
+...
+use Aropixel\SyliusStockAlertPlugin\Entity\TaxonTrait as AropixelSyliusStockAlertTaxonVariantTrait;
 ...
 
 **
@@ -85,6 +106,7 @@ use Aropixel\SyliusStockAlertPlugin\Entity\Taxon as BaseTaxon;
  */
 class Taxon extends BaseTaxon implements Comparable
 {
+ use AropixelSyliusStockAlertTaxonVariantTrait;
 ...
 }
 
