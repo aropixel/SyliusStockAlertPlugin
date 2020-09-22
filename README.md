@@ -83,15 +83,11 @@ class ProductVariant extends BaseProductVariant
 
 ```
 
-<<<<<<< HEAD
-
 - Make your 'Taxon' entity (in your src/Entity/Taxonomy folder) extends the ProductVariant entity of the bundle:
 
 ```
 use Aropixel\SyliusStockAlertPlugin\Entity\Taxon as BaseTaxon;
-=======
-<<<<<<< Updated upstream
-=======
+
 
 - Use the TaxonTrait in your Taxon Entity
 
