@@ -3,10 +3,10 @@
 
 namespace Aropixel\SyliusStockAlertPlugin\StockNotifier;
 
-use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariant;
+use Sylius\Component\Core\Model\ProductVariantInterface;
 
 interface StockNotifierInterface
 {
-    public function sendNotification(ProductVariant $variant);
+    public function sendNotification(ProductVariantInterface $variant);
 
 }

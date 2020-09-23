@@ -4,7 +4,7 @@
 namespace Aropixel\SyliusStockAlertPlugin\StockNotifier;
 
 
-use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariant;
+use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
@@ -24,7 +24,7 @@ class MailStockNotifier implements StockNotifierInterface
         $this->sender = $sender;
     }
 
-    public function sendNotification(ProductVariant $variant)
+    public function sendNotification(ProductVariantInterface $variant)
     {
         if ($this->params->get('aropixel.sylius_stock_alert.email_notifier.enabled')) {
             $emailRecipients = $this->params->get('aropixel.sylius_stock_alert.email_notifier.recipients');

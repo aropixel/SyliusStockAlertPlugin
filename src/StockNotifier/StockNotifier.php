@@ -4,8 +4,8 @@
 namespace Aropixel\SyliusStockAlertPlugin\StockNotifier;
 
 
-use Aropixel\SyliusStockAlertPlugin\Entity\ProductVariant;
 use Aropixel\SyliusStockAlertPlugin\TresholdStockManager\TresholdStockManagerInterface;
+use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Order\Model\OrderItem;
 use Sylius\Component\Payment\Model\PaymentInterface;
 
@@ -30,7 +30,7 @@ class StockNotifier
             /** @var OrderItem $item */
             foreach ($payment->getOrder()->getItems() as $item)
             {
-                /** @var ProductVariant $variant */
+                /** @var ProductVariantInterface $variant */
                 $productVariant = $item->getVariant();
 
                 if ($this->tresholdStockManager->isStockCritical($productVariant)) {
