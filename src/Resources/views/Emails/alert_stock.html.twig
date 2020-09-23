@@ -8,6 +8,6 @@
         Il ne reste de que {{ productVariant.onHand }} produit.
     </p>
     <p>
-        Pour mettre à jour le stock de ce produit, cliquez <a href="{{ path('sylius_admin_product_update', {'id':productVariant.product.id}) }}">ici</a>.
+        Pour mettre à jour le stock de ce produit, cliquez <a href="{{ absolute_url(path('sylius_admin_product_update', {'id':productVariant.product.id})) }}">ici</a>.
     </p>
 {% endblock %}
